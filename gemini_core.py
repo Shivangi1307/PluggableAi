@@ -1,15 +1,18 @@
 from google.generativeai import configure, GenerativeModel
 
-configure(api_key="")
+# 🔐 READ API KEY FROM ENVIRONMENT (safe)
+# Run:  setx GEMINI_API_KEY "your_key_here"   (Windows)
+# Or put it in a .env file (recommended)
+import os
+API_KEY = os.getenv("AIzaSyDopnKc4gSmepCI6RHtZdsUDh0GqKn8lKs", "")
 
-class GeminiCore:
-    def __init__(self):
-        self.model = GenerativeModel("gemini-pro")
+if not API_KEY:
+    raise ValueError("❌ No API key found. Set GEMINI_API_KEY environment variable.")
 
-    def ask_gemini(self, prompt):
-        response = self.model.generate_content(prompt)
+configure(api_key=API_KEY)
 
-        # For token tracking — approximate
-        tokens_used = len(prompt.split()) + len(response.text.split())
+model = GenerativeModel("gemini-pro")
 
-        return response.text, tokens_used
+def gemini_model(prompt):
+    response = model.generate_content(prompt)
+    return response.text

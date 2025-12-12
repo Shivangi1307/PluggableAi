@@ -1,48 +1,28 @@
 from plugin_router import PluginRouter
-from gemini_core import GeminiCore
+from gemini_core import gemini_model
 
-# Initialize Gemini + Plugin Router
-gemini = GeminiCore()
-router = PluginRouter(gemini)
+router = PluginRouter()
 
-TOTAL_TOKENS = 0
-GEMINI_TOKENS = 0
+print("🔌 Pluggable AI v2 – Powered by Gemini")
+print("Type 'exit' to quit.\n")
 
+while True:
+    user = input("👤 You: ")
 
-def handle_user_input(user_text):
-    global TOTAL_TOKENS, GEMINI_TOKENS
+    if user.lower() == "exit":
+        print("Goodbye!")
+        break
 
-    # Step 1: Ask router if any plugin should handle it
-    plugin_result = router.route(user_text)
+    # Try plugin first
+    plugin_response = router.route(user)
 
-    if plugin_result is not None:
+    if plugin_response:
         print("\n[PLUGIN OUTPUT]")
-        print(plugin_result)
-        return
+        print(plugin_response)
+        print()
+        continue
 
-    # Step 2: Otherwise, use Gemini (this is where 90% tokens are used)
+    # Fall back to Gemini
     print("\n[GEMINI OUTPUT]")
-
-    response, tokens_used = gemini.ask_gemini(user_text)
-
-    # Track token usage for hackathon proof
-    TOTAL_TOKENS += tokens_used
-    GEMINI_TOKENS += tokens_used
-
-    print(response)
-    print(f"\n[Token Usage] Gemini: {GEMINI_TOKENS} / Total: {TOTAL_TOKENS}")
-    return
-
-
-if __name__ == "__main__":
-    print("🔌 Welcome to Pluggable AI (Powered 90%+ by Gemini)")
-    print("Type 'exit' to quit.\n")
-
-    while True:
-        user_input = input("👤 You: ")
-
-        if user_input.lower() == "exit":
-            print("Goodbye!")
-            break
-
-        handle_user_input(user_input)
+    print(gemini_model(user))
+    print()

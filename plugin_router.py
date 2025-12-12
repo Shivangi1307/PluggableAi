@@ -2,8 +2,7 @@ import importlib
 import os
 
 class PluginRouter:
-    def __init__(self, gemini):
-        self.gemini = gemini
+    def __init__(self):
         self.plugins = self.load_plugins()
 
     def load_plugins(self):
@@ -15,10 +14,12 @@ class PluginRouter:
 
                 if hasattr(module, "can_handle") and hasattr(module, "handle"):
                     plugins.append(module)
+
         return plugins
 
     def route(self, text):
         for plugin in self.plugins:
             if plugin.can_handle(text):
                 return plugin.handle(text)
+
         return None

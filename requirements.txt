@@ -1,0 +1,5 @@
+google-generativeai
+fastapi
+uvicorn
+requests
+AIzaSyDopnKc4gSmepCI6RHtZdsUDh0GqKn8lKs
