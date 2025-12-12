@@ -1,6 +1,6 @@
 from google.generativeai import configure, GenerativeModel
 
-configure(api_key="YOUR_GEMINI_API_KEY")
+configure(api_key="")
 
 class GeminiCore:
     def __init__(self):
